@@ -1,8 +1,7 @@
 {
   "name": "saucedemo",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Sauce Demo automation project",
   "scripts": {
     "dev": "npx playwright test",
     "ui": "npx playwright test --ui"
