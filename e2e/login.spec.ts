@@ -64,7 +64,7 @@ test.describe("Login Page - Verify login flow", () => {
     const riskyInputs = [
       { label: "leading/trailing spaces", value: " standard_user " },
       { label: "internal spaces", value: "sta ndard_user" },
-      { label: "long string", value: "s".repeat(256) },
+      { label: "long string", value: "s".repeat(500) },
       { label: "unicode characters", value: "торт" },
       { label: "emoji", value: "🤣" },
     ];
