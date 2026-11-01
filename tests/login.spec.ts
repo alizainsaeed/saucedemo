@@ -5,7 +5,15 @@ test.describe("Login Page - Verify login flow", () => {
     await loginPage.goto();
   });
 
-  test.describe("Successful and Unsuccessful Authentication", () => {
+  test.describe("Core Login Flow", () => {
+    test("Verify if alert message can be closed", async ({
+      loginPage,
+    }) => {
+      await loginPage.login("standard_user", "123");
+      await loginPage.errorMsg.getByRole('button', { name: 'Dismiss error' }).click();
+      await expect(loginPage.errorMsg).toBeHidden();
+    });
+
     test("Verify user can login with valid username and password", async ({
       loginPage,
     }) => {
