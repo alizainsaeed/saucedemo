@@ -4,7 +4,7 @@
   "description": "Sauce Demo automation project",
   "scripts": {
     "test": "npx playwright test",
-    "ui": "npx playwright test --ui"
+    "ui": "npx playwright test --ui --project=chromium --project=firefox --project=webkit"
   },
   "keywords": [
     "playwright",

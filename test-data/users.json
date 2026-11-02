@@ -1,0 +1,83 @@
+{
+  "login": [
+    {
+      "name": "alert can be closed",
+      "username": "standard_user",
+      "password": "123",
+      "expectedError": "Username and password do not match",
+      "closeAlert": true
+    },
+    {
+      "name": "valid login",
+      "username": "standard_user",
+      "password": "secret_sauce",
+      "expectedUrl": "/inventory"
+    },
+    {
+      "name": "invalid username",
+      "username": "not_a_user",
+      "password": "secret_sauce",
+      "expectedError": "Username and password do not match"
+    },
+    {
+      "name": "invalid password",
+      "username": "standard_user",
+      "password": "123",
+      "expectedError": "Username and password do not match"
+    },
+    {
+      "name": "valid username different casing",
+      "username": "Standard_user",
+      "password": "123",
+      "expectedError": "Username and password do not match"
+    },
+    {
+      "name": "valid password different casing",
+      "username": "standard_user",
+      "password": "Secret_Sauce",
+      "expectedError": "Username and password do not match"
+    },
+    {
+      "name": "username empty",
+      "username": "",
+      "password": "123",
+      "expectedError": "Username is required"
+    },
+    {
+      "name": "password empty",
+      "username": "standard_user",
+      "password": "",
+      "expectedError": "Password is required"
+    },
+    {
+      "name": "leading/trailing spaces",
+      "username": " standard_user ",
+      "password": "123",
+      "expectedError": "Username and password do not match"
+    },
+    {
+      "name": "internal spaces",
+      "username": "sta ndard_user",
+      "password": "123",
+      "expectedError": "Username and password do not match"
+    },
+    {
+      "name": "long string",
+      "username": "ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss",
+      "password": "123",
+      "expectedError": "Username and password do not match"
+    },
+    {
+      "name": "unicode characters",
+      "username": "торт",
+      "password": "123",
+      "expectedError": "Username and password do not match"
+    },
+    {
+      "name": "emoji",
+      "username": "🤣",
+      "password": "123",
+      "expectedError": "Username and password do not match"
+    }
+  ]
+}

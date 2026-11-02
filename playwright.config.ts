@@ -8,24 +8,42 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: "html",
   use: {
+    testIdAttribute: "data-test",
     baseURL: "https://saucedemo.com",
     trace: "on-first-retry",
   },
 
   projects: [
     {
+      name: "setup",
+      testMatch: /auth\.setup\.ts/,
+    },
+
+    {
       name: "chromium",
-      use: { ...devices["Desktop Chrome"] },
+      dependencies: ["setup"],
+      use: {
+        ...devices["Desktop Chrome"],
+        storageState: "playwright/.auth/session.json",
+      },
     },
 
     {
       name: "firefox",
-      use: { ...devices["Desktop Firefox"] },
+      dependencies: ["setup"],
+      use: {
+        ...devices["Desktop Firefox"],
+        storageState: "playwright/.auth/session.json",
+      },
     },
 
     {
       name: "webkit",
-      use: { ...devices["Desktop Safari"] },
+      dependencies: ["setup"],
+      use: {
+        ...devices["Desktop Safari"],
+        storageState: "playwright/.auth/session.json",
+      },
     },
   ],
 });

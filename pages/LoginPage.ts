@@ -1,4 +1,14 @@
 import { Page, Locator } from "@playwright/test";
+import users from "../test-data/users.json";
+
+interface User {
+  name: string;
+  username: string;
+  password: string;
+  expectedError?: string;
+  expectedUrl?: string;
+  closeAlert?: boolean;
+}
 
 export class LoginPage {
   readonly page: Page;
@@ -6,13 +16,15 @@ export class LoginPage {
   readonly passwordInput: Locator;
   readonly loginButton: Locator;
   readonly errorMsg: Locator;
-
+  readonly users: User[];
+  
   constructor(page: Page) {
     this.page = page;
     this.usernameInput = page.getByPlaceholder("Username");
     this.passwordInput = page.getByPlaceholder("Password");
     this.loginButton = page.getByRole("button", { name: "Login" });
     this.errorMsg = page.getByRole("alert");
+    this.users = users.login;
   }
 
   async goto() {
