@@ -1,24 +1,27 @@
-import { Page, Locator, expect } from "@playwright/test";
+import { Page, Locator, expect } from '@playwright/test';
 
 export class InventoryPage {
   readonly page: Page;
   readonly inventoryItems: Locator;
+  readonly cartCount: Locator;
 
   constructor(page: Page) {
     this.page = page;
     this.inventoryItems = page
-      .getByTestId("inventory-list")
-      .getByTestId("inventory-item");
+      .getByTestId('inventory-list')
+      .getByTestId('inventory-item');
+
+    this.cartCount = page.getByTestId('shopping-cart-badge');
   }
 
   async goto(): Promise<void> {
-    await this.page.goto("/inventory.html");
+    await this.page.goto('/inventory.html');
   }
 
   async findItem(itemName: string): Promise<Locator> {
     const item = this.inventoryItems.filter({
       has: this.page
-        .getByTestId("inventory-item-name")
+        .getByTestId('inventory-item-name')
         .getByText(itemName, { exact: true }),
     });
 
@@ -28,6 +31,21 @@ export class InventoryPage {
 
   async addToCart(itemName: string): Promise<void> {
     const item = await this.findItem(itemName);
-    await item.getByRole("button", { name: "Add to cart", exact: true }).click();
+    await item
+      .getByRole('button', {
+        name: 'Add to cart',
+        exact: true,
+      })
+      .click();
+  }
+
+  async removeFromCart(itemName: string): Promise<void> {
+    const item = await this.findItem(itemName);
+    await item
+      .getByRole('button', {
+        name: 'Remove',
+        exact: true,
+      })
+      .click();
   }
 }

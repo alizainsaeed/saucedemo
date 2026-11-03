@@ -1,19 +1,38 @@
-import { test, expect } from "../fixtures/pom";
+import { test, expect } from '../fixtures/pom';
 
-test.describe("Inventory Page - Verify inventory flow", () => {
+test.describe('Inventory Page - Verify inventory flow', () => {
   test.beforeEach(async ({ inventoryPage }) => {
     await inventoryPage.goto();
   });
 
-  test.describe("Core Inventory Flow", () => {
-    const itemName = "Sauce Labs Backpack";
+  test.describe('Core Inventory Flow', () => {
+    const itemName = 'Sauce Labs Backpack';
 
-    test("Verify if an item can be added to cart", async ({
+    test('Verify if an item can be removed from cart', async ({
       inventoryPage,
     }) => {
       const item = await inventoryPage.findItem(itemName);
-      const removeButton = item.getByRole("button", {
-        name: "Remove",
+      const removeButton = item.getByRole('button', {
+        name: 'Remove',
+        exact: true,
+      });
+
+      await expect(removeButton).not.toBeVisible();
+      await inventoryPage.addToCart(itemName);
+      await expect(removeButton).toBeVisible();
+      await expect(inventoryPage.cartCount).toHaveText('1');
+
+      await inventoryPage.removeFromCart(itemName);
+      await expect(inventoryPage.cartCount).toBeHidden();
+      await expect(removeButton).not.toBeVisible();
+    });
+
+    test('Verify if an item can be added to cart', async ({
+      inventoryPage,
+    }) => {
+      const item = await inventoryPage.findItem(itemName);
+      const removeButton = item.getByRole('button', {
+        name: 'Remove',
         exact: true,
       });
 
@@ -22,13 +41,11 @@ test.describe("Inventory Page - Verify inventory flow", () => {
       await expect(removeButton).toBeVisible();
     });
 
-    test("Verify if the cart count is updated when an item is added to the cart", async ({
+    test('Verify if the cart count is updated when an item is added to the cart', async ({
       inventoryPage,
     }) => {
       await inventoryPage.addToCart(itemName);
-      const cartCount = inventoryPage.page.getByTestId("shopping-cart-badge");
-
-      await expect(cartCount).toHaveText("1");
+      await expect(inventoryPage.cartCount).toHaveText('1');
     });
   });
 });

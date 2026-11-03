@@ -1,5 +1,5 @@
-import { Page, Locator } from "@playwright/test";
-import users from "../test-data/users.json";
+import { Page, Locator } from '@playwright/test';
+import users from '../test-data/users.json';
 
 interface User {
   name: string;
@@ -17,18 +17,18 @@ export class LoginPage {
   readonly loginButton: Locator;
   readonly errorMsg: Locator;
   readonly users: User[];
-  
+
   constructor(page: Page) {
     this.page = page;
-    this.usernameInput = page.getByPlaceholder("Username");
-    this.passwordInput = page.getByPlaceholder("Password");
-    this.loginButton = page.getByRole("button", { name: "Login" });
-    this.errorMsg = page.getByRole("alert");
+    this.usernameInput = page.getByPlaceholder('Username');
+    this.passwordInput = page.getByPlaceholder('Password');
+    this.loginButton = page.getByRole('button', { name: 'Login' });
+    this.errorMsg = page.getByRole('alert');
     this.users = users.login;
   }
 
   async goto(): Promise<void> {
-    await this.page.goto("/");
+    await this.page.goto('/');
   }
 
   async login(username: string, password: string): Promise<void> {
@@ -38,16 +38,16 @@ export class LoginPage {
   }
 
   async isPasswordMasked(): Promise<boolean> {
-    const type = await this.passwordInput.getAttribute("type");
-    return type === "password";
+    const type = await this.passwordInput.getAttribute('type');
+    return type === 'password';
   }
 
   async getUsernamePlaceholder(): Promise<string | null> {
-    return await this.usernameInput.getAttribute("placeholder");
+    return await this.usernameInput.getAttribute('placeholder');
   }
 
   async getPasswordPlaceholder(): Promise<string | null> {
-    return await this.passwordInput.getAttribute("placeholder");
+    return await this.passwordInput.getAttribute('placeholder');
   }
 
   async areCoreElementsVisible(): Promise<boolean> {
