@@ -11,7 +11,7 @@ export class InventoryPage {
       .getByTestId("inventory-item");
   }
 
-  async goto() {
+  async goto(): Promise<void> {
     await this.page.goto("/inventory.html");
   }
 

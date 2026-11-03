@@ -27,30 +27,30 @@ export class LoginPage {
     this.users = users.login;
   }
 
-  async goto() {
+  async goto(): Promise<void> {
     await this.page.goto("/");
   }
 
-  async login(username: string, password: string) {
+  async login(username: string, password: string): Promise<void> {
     await this.usernameInput.fill(username);
     await this.passwordInput.fill(password);
     await this.loginButton.click();
   }
 
-  async isPasswordMasked() {
+  async isPasswordMasked(): Promise<boolean> {
     const type = await this.passwordInput.getAttribute("type");
     return type === "password";
   }
 
-  async getUsernamePlaceholder() {
+  async getUsernamePlaceholder(): Promise<string | null> {
     return await this.usernameInput.getAttribute("placeholder");
   }
 
-  async getPasswordPlaceholder() {
+  async getPasswordPlaceholder(): Promise<string | null> {
     return await this.passwordInput.getAttribute("placeholder");
   }
 
-  async areCoreElementsVisible() {
+  async areCoreElementsVisible(): Promise<boolean> {
     return (
       (await this.usernameInput.isVisible()) &&
       (await this.passwordInput.isVisible()) &&

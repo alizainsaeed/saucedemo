@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "Sauce Demo automation project",
   "scripts": {
-    "test": "npx playwright test",
-    "ui": "npx playwright test --ui --project=chromium --project=firefox --project=webkit"
+    "test": "npx playwright test --project=chromium --project=firefox --project=webkit",
+    "ui": "npx playwright test --project=setup && npx playwright test --ui --project=chromium --project=firefox --project=webkit"
   },
   "keywords": [
     "playwright",
