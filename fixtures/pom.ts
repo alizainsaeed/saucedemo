@@ -7,15 +7,19 @@ type POMFixtures = {
   inventoryPage: InventoryPage;
 };
 
-export const test = base.extend<POMFixtures>({
-  loginPage: async ({ page }, use) => {
-    const login = new LoginPage(page);
-    await use(login);
-  },
-  inventoryPage: async ({ page }, use) => {
-    const inventory = new InventoryPage(page);
-    await use(inventory);
+export const test = base.extend<{ pom: POMFixtures }>({
+  pom: async ({ page }, use) => {
+    const fixtures: POMFixtures = {
+      get loginPage() {
+        return new LoginPage(page);
+      },
+      get inventoryPage() {
+        return new InventoryPage(page);
+      },
+    };
+
+    await use(fixtures);
   },
 });
 
-export { expect };
+export { expect } from '@playwright/test';

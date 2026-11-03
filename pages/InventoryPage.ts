@@ -3,6 +3,7 @@ import { Page, Locator, expect } from '@playwright/test';
 export class InventoryPage {
   readonly page: Page;
   readonly inventoryItems: Locator;
+  readonly hamburgerIcon: Locator;
   readonly cartCount: Locator;
 
   constructor(page: Page) {
@@ -12,6 +13,7 @@ export class InventoryPage {
       .getByTestId('inventory-item');
 
     this.cartCount = page.getByTestId('shopping-cart-badge');
+    this.hamburgerIcon = page.getByRole('button', { name: 'Open Menu' });
   }
 
   async goto(): Promise<void> {

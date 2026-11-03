@@ -123,8 +123,12 @@ npx playwright test tests/login.spec.ts
 Run a specific browser project:
 
 ```bash
-npx playwright test --project=chromium
+npm run test:chromium
+npm run test:firefox
+npm run test:webkit
 ```
+
+Each browser-specific command also selects the `setup` project so authentication is prepared before the browser tests run. The same applies to `npm test` and `npm run ui`.
 
 Run the setup project independently:
 
