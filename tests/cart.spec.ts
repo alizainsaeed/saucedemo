@@ -26,7 +26,7 @@ test.describe('Cart Page - Verify cart flow', () => {
       page,
     }) => {
       await pom.cartPage.checkoutButton.click();
-      expect(page).toHaveURL('/checkout-step-one.html');
+      await expect(page).toHaveURL('/checkout-step-one.html');
     });
 
     test('Verify if pressing the continue shopping button redirects to the inventory page', async ({
@@ -34,7 +34,7 @@ test.describe('Cart Page - Verify cart flow', () => {
       page,
     }) => {
       await pom.cartPage.shoppingButton.click();
-      expect(page).toHaveURL('/inventory.html');
+      await expect(page).toHaveURL('/inventory.html');
     });
 
     test('Verify if the user can remove an item from cart', async ({ pom }) => {
@@ -46,7 +46,7 @@ test.describe('Cart Page - Verify cart flow', () => {
       pom,
     }) => {
       await pom.cartPage.openCartItem(itemName);
-      expect(pom.cartPage.inventoryItem).toHaveText(itemName);
+      await expect(pom.cartPage.inventoryItem).toHaveText(itemName);
     });
   });
 });
