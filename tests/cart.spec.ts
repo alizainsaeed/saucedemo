@@ -49,9 +49,7 @@ test.describe('Cart Page - Verify cart flow', () => {
       await expect(pom.cartPage.cartItemName(itemName)).toHaveText(itemName);
       await pom.cartPage.openCartItem(itemName);
       await expect(page).toHaveURL(/inventory-item\.html/);
-      await expect(page.getByTestId('inventory-item-name')).toHaveText(
-        itemName
-      );
+      await expect(page.getByText(itemName, { exact: true })).toBeVisible();
     });
   });
 });
