@@ -9,8 +9,8 @@ export default defineConfig({
   reporter: 'html',
   use: {
     testIdAttribute: 'data-test',
-    baseURL: 'https://saucedemo.com',
-    trace: 'on-first-retry',
+    baseURL: 'https://www.saucedemo.com',
+    trace: { mode: 'retain-on-failure', screenshots: true, snapshots: true },
   },
 
   projects: [
