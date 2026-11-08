@@ -44,9 +44,14 @@ test.describe('Cart Page - Verify cart flow', () => {
 
     test('Verify if pressing on a cart item name opens the cart product page', async ({
       pom,
+      page,
     }) => {
+      await expect(pom.cartPage.cartItemName(itemName)).toHaveText(itemName);
       await pom.cartPage.openCartItem(itemName);
-      await expect(pom.cartPage.inventoryItem).toHaveText(itemName);
+      await expect(page).toHaveURL(/inventory-item\.html/);
+      await expect(page.getByTestId('inventory-item-name')).toHaveText(
+        itemName
+      );
     });
   });
 });

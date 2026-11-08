@@ -5,14 +5,12 @@ export class CartPage {
   readonly checkoutButton: Locator;
   readonly shoppingButton: Locator;
   readonly cartList: Locator;
-  readonly inventoryItem: Locator;
 
   constructor(page: Page) {
     this.page = page;
     this.checkoutButton = page.getByTestId('checkout');
     this.shoppingButton = page.getByTestId('continue-shopping');
     this.cartList = page.getByTestId('cart-list');
-    this.inventoryItem = page.getByTestId('inventory-item-name');
   }
 
   async goto(): Promise<void> {
@@ -20,9 +18,7 @@ export class CartPage {
   }
 
   async removeCartItem(itemName: string): Promise<Locator> {
-    const item = this.cartList.getByTestId('inventory-item').filter({
-      hasText: itemName,
-    });
+    const item = this.cartItem(itemName);
 
     const removeButton = item.getByRole('button', {
       name: 'Remove',
@@ -34,9 +30,7 @@ export class CartPage {
   }
 
   async openCartItem(itemName: string): Promise<void> {
-    const item = this.cartList.getByTestId('inventory-item').filter({
-      hasText: itemName,
-    });
+    const item = this.cartItem(itemName);
 
     const titleButton = item.getByRole('button', {
       name: `View details for ${itemName}`,
@@ -44,5 +38,23 @@ export class CartPage {
     });
 
     await titleButton.click();
+  }
+
+  cartItemName(itemName: string): Locator {
+    return this.cartItem(itemName).getByRole('button', {
+      name: `View details for ${itemName}`,
+      exact: true,
+    });
+  }
+
+  private cartItem(itemName: string): Locator {
+    const titleButton = this.page.getByRole('button', {
+      name: `View details for ${itemName}`,
+      exact: true,
+    });
+
+    return this.cartList
+      .getByTestId('inventory-item')
+      .filter({ has: titleButton });
   }
 }
