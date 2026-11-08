@@ -1,24 +1,6 @@
-import { test, expect, POMFixtures } from '../fixtures/pom';
-import { Locator } from '@playwright/test';
-
-async function addCartItem(
-  pom: POMFixtures,
-  item: string,
-  removeButton: Locator
-) {
-  await expect(removeButton).not.toBeVisible();
-  await pom.inventoryPage.addToCart(item);
-  await expect(removeButton).toBeVisible();
-}
-
-async function removeCartItem(
-  pom: POMFixtures,
-  item: string,
-  removeButton: Locator
-) {
-  await pom.inventoryPage.removeFromCart(item);
-  await expect(removeButton).not.toBeVisible();
-}
+import { addItemToCart, RemoveItemFromCart } from '../utils/helpers';
+import { test, expect } from '../fixtures/pom';
+import itemsData from '../test-data/items.json';
 
 test.describe('Inventory Page - Verify inventory flow', () => {
   test.beforeEach(async ({ pom }) => {
@@ -26,52 +8,53 @@ test.describe('Inventory Page - Verify inventory flow', () => {
   });
 
   test.describe('Core Inventory Flow', () => {
-    const items = ['Sauce Labs Backpack', 'Sauce Labs Bike Light'];
+    const backpack = itemsData.items[0].name;
+    const bikeLight = itemsData.items[1].name;
 
     test('Verify if an item can be removed from cart', async ({ pom }) => {
-      const item = await pom.inventoryPage.findItem(items[0]);
+      const item = await pom.inventoryPage.findItem(backpack);
       const removeButton = item.getByRole('button', {
         name: 'Remove',
         exact: true,
       });
 
-      await addCartItem(pom, items[0], removeButton);
+      await addItemToCart(pom, backpack, removeButton);
       await expect(pom.inventoryPage.cartCount).toHaveText('1');
-      await removeCartItem(pom, items[0], removeButton);
+      await RemoveItemFromCart(pom, backpack, removeButton);
     });
 
     test('Verify if cart badge goes away when an item is removed from cart', async ({
       pom,
     }) => {
-      const item = await pom.inventoryPage.findItem(items[0]);
+      const item = await pom.inventoryPage.findItem(backpack);
       const removeButton = item.getByRole('button', {
         name: 'Remove',
         exact: true,
       });
 
-      await addCartItem(pom, items[0], removeButton);
+      await addItemToCart(pom, backpack, removeButton);
       await expect(pom.inventoryPage.cartCount).toHaveText('1');
 
-      await removeCartItem(pom, items[0], removeButton);
+      await RemoveItemFromCart(pom, backpack, removeButton);
       await expect(pom.inventoryPage.cartCount).toBeHidden();
     });
 
     test('Verify if an item can be added to cart', async ({ pom }) => {
-      const item = await pom.inventoryPage.findItem(items[0]);
+      const item = await pom.inventoryPage.findItem(backpack);
       const removeButton = item.getByRole('button', {
         name: 'Remove',
         exact: true,
       });
 
       await expect(removeButton).not.toBeVisible();
-      await pom.inventoryPage.addToCart(items[0]);
+      await pom.inventoryPage.addToCart(backpack);
       await expect(removeButton).toBeVisible();
     });
 
     test('Verify if cart badge shows up an item is added to cart', async ({
       pom,
     }) => {
-      await pom.inventoryPage.addToCart(items[0]);
+      await pom.inventoryPage.addToCart(backpack);
       await expect(pom.inventoryPage.cartCount).toHaveText('1');
     });
 
@@ -83,17 +66,17 @@ test.describe('Inventory Page - Verify inventory flow', () => {
     test('Verify if the cart counter increments correctly when an item is already in cart', async ({
       pom,
     }) => {
-      await pom.inventoryPage.addToCart(items[0]);
-      await pom.inventoryPage.addToCart(items[1]);
+      await pom.inventoryPage.addToCart(backpack);
+      await pom.inventoryPage.addToCart(bikeLight);
       await expect(pom.inventoryPage.cartCount).toHaveText('2');
     });
 
     test('Verify if the cart counter decrements correctly when an item is already in cart', async ({
       pom,
     }) => {
-      await pom.inventoryPage.addToCart(items[0]);
-      await pom.inventoryPage.addToCart(items[1]);
-      await pom.inventoryPage.removeFromCart(items[1]);
+      await pom.inventoryPage.addToCart(backpack);
+      await pom.inventoryPage.addToCart(bikeLight);
+      await pom.inventoryPage.removeFromCart(bikeLight);
       await expect(pom.inventoryPage.cartCount).toHaveText('1');
     });
 
@@ -175,7 +158,7 @@ test.describe('Inventory Page - Verify inventory flow', () => {
       page,
     }) => {
       await pom.inventoryPage.cartIcon.click();
-      expect(page).toHaveURL(/cart/);
+      await expect(page).toHaveURL(/cart/);
     });
   });
 });
