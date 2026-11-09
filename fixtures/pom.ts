@@ -2,11 +2,13 @@ import { test as base } from '@playwright/test';
 import { LoginPage } from '../pages/LoginPage';
 import { InventoryPage } from '../pages/InventoryPage';
 import { CartPage } from '../pages/CartPage';
+import { CheckoutPage } from '../pages/CheckoutPage';
 
 export type POMFixtures = {
   loginPage: LoginPage;
   inventoryPage: InventoryPage;
   cartPage: CartPage;
+  checkoutPage: CheckoutPage;
 };
 
 export const test = base.extend<{ pom: POMFixtures }>({
@@ -20,6 +22,9 @@ export const test = base.extend<{ pom: POMFixtures }>({
       },
       get cartPage() {
         return new CartPage(page);
+      },
+      get checkoutPage() {
+        return new CheckoutPage(page);
       },
     };
 

@@ -1,6 +1,7 @@
 import { Locator, expect } from '@playwright/test';
 import { LoginPage } from '../pages/LoginPage';
 import { POMFixtures } from '../fixtures/pom';
+import itemsData from '../test-data/items.json';
 
 export const getUserByName = (loginPage: LoginPage, name: string) => {
   const user = loginPage.users.find((u: any) => u.name === name);
@@ -10,6 +11,20 @@ export const getUserByName = (loginPage: LoginPage, name: string) => {
 
   return user;
 };
+
+export async function seedData(pom: POMFixtures) {
+  await pom.inventoryPage.goto();
+
+  for (const item of itemsData.items) {
+    const cartItem = await pom.inventoryPage.findItem(item.name);
+    const removeButton = cartItem.getByRole('button', {
+      name: 'Remove',
+      exact: true,
+    });
+
+    await addItemToCart(pom, item.name, removeButton);
+  }
+}
 
 export async function addItemToCart(
   pom: POMFixtures,
