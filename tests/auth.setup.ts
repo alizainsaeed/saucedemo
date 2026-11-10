@@ -10,7 +10,7 @@ test('Authenticate user', async ({ page }) => {
 
   const user = getUserByName(loginPage, 'valid login');
   await loginPage.login(user.username, user.password);
-  await expect(page).toHaveURL(/inventory/);
+  await expect(page).toHaveURL('/inventory.html');
 
   await page.context().storageState({ path: authSession });
 });

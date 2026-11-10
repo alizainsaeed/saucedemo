@@ -1,13 +1,14 @@
 import { test, expect } from '../fixtures/pom';
 import { seedData } from '../utils/helpers';
+import itemsData from '../test-data/items.json';
 
 test.describe('Checkout page - Verify checkout flow', () => {
-  test.beforeEach(async ({ pom }) => {
-    await seedData(pom);
-    pom.checkoutPage.goto();
-  });
-
   test.describe('Checkout step one', () => {
+    test.beforeEach(async ({ pom }) => {
+      await seedData(pom);
+      await pom.checkoutPage.goto();
+    });
+
     test('Verify that the site shows an error when no name is entered', async ({
       pom,
     }) => {
@@ -65,6 +66,129 @@ test.describe('Checkout page - Verify checkout flow', () => {
       await pom.checkoutPage.submitButton.click();
       await pom.checkoutPage.dismissButton.click();
       await expect(pom.checkoutPage.alertMsg).not.toBeVisible();
+    });
+
+    test('Verify if the cart counter is accurately displayed', async ({
+      pom,
+    }) => {
+      const items = itemsData.items.length;
+      await expect(pom.checkoutPage.cartCount).toHaveText(String(items));
+    });
+
+    test('Verify if pressing Enter in a field after filling the form submits the form', async ({
+      pom,
+      page,
+    }) => {
+      test.fixme(
+        true,
+        'BUG: Pressing the enter key redirects the user to the cart page.'
+      );
+
+      await pom.checkoutPage.firstName.fill('John');
+      await pom.checkoutPage.lastName.fill('Doe');
+      await pom.checkoutPage.zipCode.fill('19400');
+      await pom.checkoutPage.zipCode.press('Enter');
+      await expect(page).toHaveURL('/checkout-step-two.html');
+    });
+
+    test('Verify if zip code only accepts numerics', async ({ pom }) => {
+      test.fixme(
+        true,
+        'BUG: The user can input letters too with no validation being performed.'
+      );
+
+      await pom.checkoutPage.firstName.fill('John');
+      await pom.checkoutPage.lastName.fill('Doe');
+      await pom.checkoutPage.zipCode.fill('abc');
+      await pom.checkoutPage.submitButton.click();
+      await expect(pom.checkoutPage.alertMsg).toContainText('Invalid zip code');
+    });
+  });
+
+  test.describe('Checkout step two', () => {
+    test.beforeEach(async ({ pom }) => {
+      await seedData(pom);
+      await pom.checkoutPage.gotoStepTwo();
+    });
+
+    test('Verify if the hamburger menu opens', async ({ pom }) => {
+      await pom.checkoutPage.hamburgerIcon.click();
+      await expect(pom.checkoutPage.hamburgerMenu).toBeVisible();
+    });
+
+    test('Verify if the user can navigate to the inventory page through the hamburger menu', async ({
+      pom,
+      page,
+    }) => {
+      await pom.checkoutPage.hamburgerIcon.click();
+      await expect(pom.checkoutPage.hamburgerMenu).toBeVisible();
+
+      await pom.checkoutPage.inventoryLink.click();
+      await expect(page).toHaveURL('/inventory.html');
+    });
+
+    test('Verify if the user can logout through the hamburger menu', async ({
+      pom,
+      page,
+    }) => {
+      await pom.checkoutPage.hamburgerIcon.click();
+      await expect(pom.checkoutPage.hamburgerMenu).toBeVisible();
+
+      await pom.checkoutPage.logoutLink.click();
+      await expect(page).toHaveURL('/');
+    });
+
+    test('Verify if the cart page is opened when the user clicks on the cart icon', async ({
+      pom,
+      page,
+    }) => {
+      await pom.checkoutPage.cartIcon.click();
+      await expect(page).toHaveURL('/cart.html');
+    });
+
+    test('Verify if pressing Cancel routes the user to the inventory page', async ({
+      pom,
+      page,
+    }) => {
+      await pom.checkoutPage.cancelButton.click();
+      await expect(page).toHaveURL('/inventory.html');
+    });
+
+    test('Verify if pressing Finish shows the checkout completion page', async ({
+      pom,
+      page,
+    }) => {
+      await pom.checkoutPage.finishButton.click();
+      await expect(page).toHaveURL('/checkout-complete.html');
+    });
+
+    test('Verify if the cart counter is displayed correctly', async ({
+      pom,
+    }) => {
+      const items = itemsData.items.length;
+      await expect(pom.checkoutPage.cartCount).toHaveText(String(items));
+    });
+
+    test('Verify if the item(s) added to cart is shown in checkout', async ({
+      pom,
+    }) => {
+      const expectedNames = itemsData.items.map((item) => item.name);
+      const expectedPrices = itemsData.items.map(
+        (item) => `$${item.price.toFixed(2)}`
+      );
+
+      await expect(pom.checkoutPage.cartTitle).toHaveText(expectedNames);
+      await expect(pom.checkoutPage.cartPrice).toHaveText(expectedPrices);
+    });
+
+    test('Verify if the subtotal is calculated correctly', async ({ pom }) => {
+      const expectedTotal = itemsData.items
+        .reduce((sum, item) => sum + item.price, 0)
+        .toFixed(2);
+
+      await expect(pom.checkoutPage.subtotalPrice).toHaveText(
+        `Item total: $${expectedTotal}`
+      );
     });
   });
 });
