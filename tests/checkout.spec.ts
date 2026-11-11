@@ -1,5 +1,5 @@
 import { test, expect } from '../fixtures/pom';
-import { seedData } from '../utils/helpers';
+import { seedCompletedData, seedData } from '../utils/helpers';
 import itemsData from '../test-data/items.json';
 
 test.describe('Checkout page - Verify checkout flow', () => {
@@ -181,14 +181,87 @@ test.describe('Checkout page - Verify checkout flow', () => {
       await expect(pom.checkoutPage.cartPrice).toHaveText(expectedPrices);
     });
 
-    test('Verify if the subtotal is calculated correctly', async ({ pom }) => {
-      const expectedTotal = itemsData.items
-        .reduce((sum, item) => sum + item.price, 0)
-        .toFixed(2);
+    test('Verify if the total is calculated correctly', async ({ pom }) => {
+      const subtotal = itemsData.items.reduce(
+        (sum, item) => sum + Math.round(item.price * 100),
+        0
+      );
+      const tax = Math.round(subtotal * 0.08);
+      const total = subtotal + tax;
+      const money = (cents: number) => (cents / 100).toFixed(2);
 
       await expect(pom.checkoutPage.subtotalPrice).toHaveText(
-        `Item total: $${expectedTotal}`
+        `Item total: $${money(subtotal)}`
       );
+      await expect(pom.checkoutPage.taxPrice).toHaveText(`Tax: $${money(tax)}`);
+      await expect(pom.checkoutPage.totalPrice).toHaveText(
+        `Total: $${money(total)}`
+      );
+    });
+  });
+
+  test.describe('Checkout completed', () => {
+    test.beforeEach(async ({ pom }) => {
+      await seedCompletedData(pom);
+    });
+
+    test('Verify if the hamburger menu opens', async ({ pom }) => {
+      await pom.checkoutPage.hamburgerIcon.click();
+      await expect(pom.checkoutPage.hamburgerMenu).toBeVisible();
+    });
+
+    test('Verify if the user can navigate to the inventory page through the hamburger menu', async ({
+      pom,
+      page,
+    }) => {
+      await pom.checkoutPage.hamburgerIcon.click();
+      await expect(pom.checkoutPage.hamburgerMenu).toBeVisible();
+
+      await pom.checkoutPage.inventoryLink.click();
+      await expect(page).toHaveURL('/inventory.html');
+    });
+
+    test('Verify if the user can logout through the hamburger menu', async ({
+      pom,
+      page,
+    }) => {
+      await pom.checkoutPage.hamburgerIcon.click();
+      await expect(pom.checkoutPage.hamburgerMenu).toBeVisible();
+
+      await pom.checkoutPage.logoutLink.click();
+      await expect(page).toHaveURL('/');
+    });
+
+    test('Verify if the cart page is opened when the user clicks on the cart icon', async ({
+      pom,
+      page,
+    }) => {
+      await pom.checkoutPage.cartIcon.click();
+      await expect(page).toHaveURL('/cart.html');
+    });
+
+    test('Verify if the cart counter is reset', async ({ pom }) => {
+      await expect(pom.checkoutPage.cartCount).not.toBeVisible();
+    });
+
+    test('Verify if pressing the back home button routes the user to the inventory page', async ({
+      pom,
+      page,
+    }) => {
+      await pom.checkoutPage.backHomeButton.click();
+      await expect(page).toHaveURL('inventory.html');
+    });
+
+    test('Verify if pressing the Generate PDF order downloads the order PDF', async ({
+      pom,
+      page,
+    }) => {
+      const downloadPromise = page.waitForEvent('download');
+      await pom.checkoutPage.generateButton.click();
+
+      const pdf = await downloadPromise;
+      const pdfName = pdf.suggestedFilename();
+      expect(pdfName).toContain('swag-labs-order');
     });
   });
 });

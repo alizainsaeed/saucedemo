@@ -26,6 +26,29 @@ export async function seedData(pom: POMFixtures) {
   }
 }
 
+export async function seedCompletedData(pom: POMFixtures) {
+  await pom.inventoryPage.goto();
+
+  for (const item of itemsData.items) {
+    const cartItem = await pom.inventoryPage.findItem(item.name);
+    const removeButton = cartItem.getByRole('button', {
+      name: 'Remove',
+      exact: true,
+    });
+
+    await addItemToCart(pom, item.name, removeButton);
+  }
+
+  await pom.checkoutPage.goto();
+  await pom.checkoutPage.firstName.fill('John');
+  await pom.checkoutPage.lastName.fill('Doe');
+  await pom.checkoutPage.zipCode.fill('19400');
+  await pom.checkoutPage.submitButton.click();
+  await expect(pom.checkoutPage.page).toHaveURL('/checkout-step-two.html');
+  await pom.checkoutPage.finishButton.click();
+  await expect(pom.checkoutPage.page).toHaveURL('/checkout-complete.html');
+}
+
 export async function addItemToCart(
   pom: POMFixtures,
   item: string,
