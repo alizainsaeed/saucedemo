@@ -5,14 +5,16 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
+  workers: process.env.CI ? 1 : 1,
   reporter: 'html',
   use: {
     testIdAttribute: 'data-test',
     baseURL: 'https://www.saucedemo.com',
-    trace: process.env.CI
-      ? 'off'
-      : { mode: 'retain-on-failure', screenshots: true, snapshots: true },
+    trace: {
+      mode: 'retain-on-failure',
+      screenshots: true,
+      snapshots: true,
+    },
   },
 
   projects: [

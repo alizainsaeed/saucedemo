@@ -9,7 +9,7 @@ test.describe('Checkout page - Verify checkout flow', () => {
       await pom.checkoutPage.goto();
     });
 
-    test('Verify that the site shows an error when no name is entered', async ({
+    test('[CHECKOUT_S1_02] @regression Verify that the site shows an error when no name is entered', async ({
       pom,
     }) => {
       await pom.checkoutPage.lastName.fill('Doe');
@@ -20,7 +20,7 @@ test.describe('Checkout page - Verify checkout flow', () => {
       );
     });
 
-    test('Verify that the site shows an error when no last name is entered', async ({
+    test('[CHECKOUT_S1_03] @regression Verify that the site shows an error when no last name is entered', async ({
       pom,
     }) => {
       await pom.checkoutPage.firstName.fill('John');
@@ -31,7 +31,7 @@ test.describe('Checkout page - Verify checkout flow', () => {
       );
     });
 
-    test('Verify that the site shows an error when no zip code is entered', async ({
+    test('[CHECKOUT_S1_04] @regression Verify that the site shows an error when no zip code is entered', async ({
       pom,
     }) => {
       await pom.checkoutPage.firstName.fill('John');
@@ -42,7 +42,7 @@ test.describe('Checkout page - Verify checkout flow', () => {
       );
     });
 
-    test('Verify if pressing cancel routes the user to the cart page', async ({
+    test('[CHECKOUT_S1_06] @regression Verify if pressing cancel routes the user to the cart page', async ({
       pom,
       page,
     }) => {
@@ -50,17 +50,24 @@ test.describe('Checkout page - Verify checkout flow', () => {
       await expect(page).toHaveURL('/cart.html');
     });
 
-    test('Verify if the user can open the hamburger menu', async ({ pom }) => {
+    test('[CHECKOUT_S1_08] @regression Verify if the user can open the hamburger menu', async ({
+      pom,
+    }) => {
       await pom.checkoutPage.hamburgerIcon.click();
       await expect(pom.checkoutPage.hamburgerMenu).toBeVisible();
     });
 
-    test('Verify if the user can open the cart', async ({ pom, page }) => {
+    test('[CHECKOUT_S1_09] @regression Verify if the user can open the cart', async ({
+      pom,
+      page,
+    }) => {
       await pom.checkoutPage.cartIcon.click();
       await expect(page).toHaveURL('/cart.html');
     });
 
-    test('Verify if the error message popup can be closed', async ({ pom }) => {
+    test('[CHECKOUT_S1_10] @regression Verify if the error message popup can be closed', async ({
+      pom,
+    }) => {
       await pom.checkoutPage.firstName.fill('John');
       await pom.checkoutPage.lastName.fill('Doe');
       await pom.checkoutPage.submitButton.click();
@@ -68,14 +75,14 @@ test.describe('Checkout page - Verify checkout flow', () => {
       await expect(pom.checkoutPage.alertMsg).not.toBeVisible();
     });
 
-    test('Verify if the cart counter is accurately displayed', async ({
+    test('[CHECKOUT_S1_11] @regression Verify if the cart counter is accurately displayed', async ({
       pom,
     }) => {
       const items = itemsData.items.length;
       await expect(pom.checkoutPage.cartCount).toHaveText(String(items));
     });
 
-    test('Verify if pressing Enter in a field after filling the form submits the form', async ({
+    test('[CHECKOUT_S1_01] @regression Verify if pressing Enter in a field after filling the form submits the form', async ({
       pom,
       page,
     }) => {
@@ -91,7 +98,9 @@ test.describe('Checkout page - Verify checkout flow', () => {
       await expect(page).toHaveURL('/checkout-step-two.html');
     });
 
-    test('Verify if zip code only accepts numerics', async ({ pom }) => {
+    test('[CHECKOUT_S1_05] @regression Verify if zip code only accepts numerics', async ({
+      pom,
+    }) => {
       test.fixme(
         true,
         'BUG: The user can input letters too with no validation being performed.'
@@ -111,12 +120,14 @@ test.describe('Checkout page - Verify checkout flow', () => {
       await pom.checkoutPage.gotoStepTwo();
     });
 
-    test('Verify if the hamburger menu opens', async ({ pom }) => {
+    test('[CHECKOUT_S2_01] @regression Verify if the hamburger menu opens', async ({
+      pom,
+    }) => {
       await pom.checkoutPage.hamburgerIcon.click();
       await expect(pom.checkoutPage.hamburgerMenu).toBeVisible();
     });
 
-    test('Verify if the user can navigate to the inventory page through the hamburger menu', async ({
+    test('[CHECKOUT_S2_02] @regression Verify if the user can navigate to the inventory page through the hamburger menu', async ({
       pom,
       page,
     }) => {
@@ -127,7 +138,7 @@ test.describe('Checkout page - Verify checkout flow', () => {
       await expect(page).toHaveURL('/inventory.html');
     });
 
-    test('Verify if the user can logout through the hamburger menu', async ({
+    test('[CHECKOUT_S2_03] @regression Verify if the user can logout through the hamburger menu', async ({
       pom,
       page,
     }) => {
@@ -138,7 +149,7 @@ test.describe('Checkout page - Verify checkout flow', () => {
       await expect(page).toHaveURL('/');
     });
 
-    test('Verify if the cart page is opened when the user clicks on the cart icon', async ({
+    test('[CHECKOUT_S2_04] @regression Verify if the cart page is opened when the user clicks on the cart icon', async ({
       pom,
       page,
     }) => {
@@ -146,7 +157,7 @@ test.describe('Checkout page - Verify checkout flow', () => {
       await expect(page).toHaveURL('/cart.html');
     });
 
-    test('Verify if pressing Cancel routes the user to the inventory page', async ({
+    test('[CHECKOUT_S2_05] @regression Verify if pressing Cancel routes the user to the inventory page', async ({
       pom,
       page,
     }) => {
@@ -154,7 +165,7 @@ test.describe('Checkout page - Verify checkout flow', () => {
       await expect(page).toHaveURL('/inventory.html');
     });
 
-    test('Verify if pressing Finish shows the checkout completion page', async ({
+    test('[CHECKOUT_S2_06] @smoke @regression Verify if pressing Finish shows the checkout completion page', async ({
       pom,
       page,
     }) => {
@@ -162,14 +173,14 @@ test.describe('Checkout page - Verify checkout flow', () => {
       await expect(page).toHaveURL('/checkout-complete.html');
     });
 
-    test('Verify if the cart counter is displayed correctly', async ({
+    test('[CHECKOUT_S2_09] @regression Verify if the cart counter is displayed correctly', async ({
       pom,
     }) => {
       const items = itemsData.items.length;
       await expect(pom.checkoutPage.cartCount).toHaveText(String(items));
     });
 
-    test('Verify if the item(s) added to cart is shown in checkout', async ({
+    test('[CHECKOUT_S2_08] @regression Verify if the item(s) added to cart is shown in checkout', async ({
       pom,
     }) => {
       const expectedNames = itemsData.items.map((item) => item.name);
@@ -181,7 +192,9 @@ test.describe('Checkout page - Verify checkout flow', () => {
       await expect(pom.checkoutPage.cartPrice).toHaveText(expectedPrices);
     });
 
-    test('Verify if the total is calculated correctly', async ({ pom }) => {
+    test('[CHECKOUT_S2_07] @regression Verify if the total is calculated correctly', async ({
+      pom,
+    }) => {
       const subtotal = itemsData.items.reduce(
         (sum, item) => sum + Math.round(item.price * 100),
         0
@@ -205,12 +218,14 @@ test.describe('Checkout page - Verify checkout flow', () => {
       await seedCompletedData(pom);
     });
 
-    test('Verify if the hamburger menu opens', async ({ pom }) => {
+    test('[CHECKOUT_CMP_05] @regression Verify if the hamburger menu opens', async ({
+      pom,
+    }) => {
       await pom.checkoutPage.hamburgerIcon.click();
       await expect(pom.checkoutPage.hamburgerMenu).toBeVisible();
     });
 
-    test('Verify if the user can navigate to the inventory page through the hamburger menu', async ({
+    test('[CHECKOUT_CMP_06] @regression Verify if the user can navigate to the inventory page through the hamburger menu', async ({
       pom,
       page,
     }) => {
@@ -221,7 +236,7 @@ test.describe('Checkout page - Verify checkout flow', () => {
       await expect(page).toHaveURL('/inventory.html');
     });
 
-    test('Verify if the user can logout through the hamburger menu', async ({
+    test('[CHECKOUT_CMP_07] @regression Verify if the user can logout through the hamburger menu', async ({
       pom,
       page,
     }) => {
@@ -232,7 +247,7 @@ test.describe('Checkout page - Verify checkout flow', () => {
       await expect(page).toHaveURL('/');
     });
 
-    test('Verify if the cart page is opened when the user clicks on the cart icon', async ({
+    test('[CHECKOUT_CMP_04] @regression Verify if the cart page is opened when the user clicks on the cart icon', async ({
       pom,
       page,
     }) => {
@@ -240,11 +255,13 @@ test.describe('Checkout page - Verify checkout flow', () => {
       await expect(page).toHaveURL('/cart.html');
     });
 
-    test('Verify if the cart counter is reset', async ({ pom }) => {
+    test('[CHECKOUT_CMP_03] @regression Verify if the cart counter is reset', async ({
+      pom,
+    }) => {
       await expect(pom.checkoutPage.cartCount).not.toBeVisible();
     });
 
-    test('Verify if pressing the back home button routes the user to the inventory page', async ({
+    test('[CHECKOUT_CMP_01] @regression Verify if pressing the back home button routes the user to the inventory page', async ({
       pom,
       page,
     }) => {
@@ -252,7 +269,7 @@ test.describe('Checkout page - Verify checkout flow', () => {
       await expect(page).toHaveURL('inventory.html');
     });
 
-    test('Verify if pressing the Generate PDF order downloads the order PDF', async ({
+    test('[CHECKOUT_CMP_02] @regression Verify if pressing the Generate PDF order downloads the order PDF', async ({
       pom,
       page,
     }) => {

@@ -10,7 +10,9 @@ test.describe('Inventory Page - Verify inventory flow', () => {
     await pom.inventoryPage.goto();
   });
 
-  test('Verify if an item can be removed from cart', async ({ pom }) => {
+  test('[INVENTORY_02] @regression Verify if an item can be removed from cart', async ({
+    pom,
+  }) => {
     const item = await pom.inventoryPage.findItem(backpack);
     const removeButton = item.getByRole('button', {
       name: 'Remove',
@@ -22,7 +24,7 @@ test.describe('Inventory Page - Verify inventory flow', () => {
     await RemoveItemFromCart(pom, backpack, removeButton);
   });
 
-  test('Verify if cart badge goes away when an item is removed from cart', async ({
+  test('[INVENTORY_04] @regression Verify if cart badge goes away when an item is removed from cart', async ({
     pom,
   }) => {
     const item = await pom.inventoryPage.findItem(backpack);
@@ -38,7 +40,9 @@ test.describe('Inventory Page - Verify inventory flow', () => {
     await expect(pom.inventoryPage.cartCount).toBeHidden();
   });
 
-  test('Verify if an item can be added to cart', async ({ pom }) => {
+  test('[INVENTORY_01] @smoke @regression Verify if an item can be added to cart', async ({
+    pom,
+  }) => {
     const item = await pom.inventoryPage.findItem(backpack);
     const removeButton = item.getByRole('button', {
       name: 'Remove',
@@ -50,19 +54,21 @@ test.describe('Inventory Page - Verify inventory flow', () => {
     await expect(removeButton).toBeVisible();
   });
 
-  test('Verify if cart badge shows up an item is added to cart', async ({
+  test('[INVENTORY_03] @smoke @regression Verify if cart badge shows up an item is added to cart', async ({
     pom,
   }) => {
     await pom.inventoryPage.addToCart(backpack);
     await expect(pom.inventoryPage.cartCount).toHaveText('1');
   });
 
-  test('Verify if hamburger menu opens', async ({ pom }) => {
+  test('[INVENTORY_05] @regression Verify if hamburger menu opens', async ({
+    pom,
+  }) => {
     await pom.inventoryPage.hamburgerIcon.click();
     await expect(pom.inventoryPage.hamburgerMenu).toBeVisible();
   });
 
-  test('Verify if the cart counter increments correctly when an item is already in cart', async ({
+  test('[INVENTORY_06] @regression Verify if the cart counter increments correctly when an item is already in cart', async ({
     pom,
   }) => {
     await pom.inventoryPage.addToCart(backpack);
@@ -70,7 +76,7 @@ test.describe('Inventory Page - Verify inventory flow', () => {
     await expect(pom.inventoryPage.cartCount).toHaveText('2');
   });
 
-  test('Verify if the cart counter decrements correctly when an item is already in cart', async ({
+  test('[INVENTORY_07] @regression Verify if the cart counter decrements correctly when an item is already in cart', async ({
     pom,
   }) => {
     await pom.inventoryPage.addToCart(backpack);
@@ -79,7 +85,7 @@ test.describe('Inventory Page - Verify inventory flow', () => {
     await expect(pom.inventoryPage.cartCount).toHaveText('1');
   });
 
-  test('Verify if the user can log out from their current session', async ({
+  test('[INVENTORY_08] @regression Verify if the user can log out from their current session', async ({
     pom,
     page,
   }) => {
@@ -90,7 +96,7 @@ test.describe('Inventory Page - Verify inventory flow', () => {
     await expect(page).toHaveURL('/');
   });
 
-  test('Verify if the user can sort the listings alphabetically (ascending order)', async ({
+  test('[INVENTORY_09] @regression Verify if the user can sort the listings alphabetically (ascending order)', async ({
     pom,
   }) => {
     await pom.inventoryPage.filterButton.selectOption('az');
@@ -101,7 +107,7 @@ test.describe('Inventory Page - Verify inventory flow', () => {
     expect(actualItems).toEqual(sortedItems);
   });
 
-  test('Verify if the user can sort the listings alphabetically (descending order)', async ({
+  test('[INVENTORY_10] @regression Verify if the user can sort the listings alphabetically (descending order)', async ({
     pom,
   }) => {
     await pom.inventoryPage.filterButton.selectOption('za');
@@ -112,7 +118,7 @@ test.describe('Inventory Page - Verify inventory flow', () => {
     expect(actualItems).toEqual(sortedItems);
   });
 
-  test('Verify if the user can sort the listings price-wise (low-to-high)', async ({
+  test('[INVENTORY_11] @regression Verify if the user can sort the listings price-wise (low-to-high)', async ({
     pom,
   }) => {
     await pom.inventoryPage.filterButton.selectOption('lohi');
@@ -127,7 +133,7 @@ test.describe('Inventory Page - Verify inventory flow', () => {
     expect(numericPrices).toEqual(sortedPrices);
   });
 
-  test('Verify if the user can sort the listings price-wise (high-to-low)', async ({
+  test('[INVENTORY_12] @regression Verify if the user can sort the listings price-wise (high-to-low)', async ({
     pom,
   }) => {
     await pom.inventoryPage.filterButton.selectOption('hilo');
@@ -142,7 +148,7 @@ test.describe('Inventory Page - Verify inventory flow', () => {
     expect(numericPrices).toEqual(sortedPrices);
   });
 
-  test('Verify if pressing the cart icon opens the cart page', async ({
+  test('[INVENTORY_13] @smoke @regression Verify if pressing the cart icon opens the cart page', async ({
     pom,
     page,
   }) => {

@@ -4,4 +4,12 @@ const eslintPluginPrettierRecommended = require('eslint-plugin-prettier/recommen
 module.exports = [
   js.configs.recommended,
   eslintPluginPrettierRecommended,
+  {
+    languageOptions: {
+      globals: {
+        module: 'readonly',
+        require: 'readonly',
+      },
+    },
+  },
 ];

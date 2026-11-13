@@ -10,7 +10,7 @@ test.describe('Cart Page - Verify cart flow', () => {
     await pom.cartPage.goto();
   });
 
-  test('Verify if pressing the checkout page redirects to the checkout page', async ({
+  test('[CART_01] @smoke @regression Verify if pressing the checkout page redirects to the checkout page', async ({
     pom,
     page,
   }) => {
@@ -18,7 +18,7 @@ test.describe('Cart Page - Verify cart flow', () => {
     await expect(page).toHaveURL('/checkout-step-one.html');
   });
 
-  test('Verify if pressing the continue shopping button redirects to the inventory page', async ({
+  test('[CART_02] @regression Verify if pressing the continue shopping button redirects to the inventory page', async ({
     pom,
     page,
   }) => {
@@ -26,12 +26,14 @@ test.describe('Cart Page - Verify cart flow', () => {
     await expect(page).toHaveURL('/inventory.html');
   });
 
-  test('Verify if the user can remove an item from cart', async ({ pom }) => {
+  test('[CART_03] @regression Verify if the user can remove an item from cart', async ({
+    pom,
+  }) => {
     const item = await pom.cartPage.removeCartItem(itemName);
     await expect(item).not.toBeVisible();
   });
 
-  test('Verify if pressing on a cart item name opens the cart product page', async ({
+  test('[CART_04] @regression Verify if pressing on a cart item name opens the cart product page', async ({
     pom,
     page,
   }) => {
@@ -41,12 +43,14 @@ test.describe('Cart Page - Verify cart flow', () => {
     await expect(page.getByText(itemName, { exact: true })).toBeVisible();
   });
 
-  test('Verify if the user can open the hamburger menu', async ({ pom }) => {
+  test('[CART_05] @regression Verify if the user can open the hamburger menu', async ({
+    pom,
+  }) => {
     await pom.cartPage.hamburgerIcon.click();
     await expect(pom.inventoryPage.hamburgerMenu).toBeVisible();
   });
 
-  test('Verify if user can navigate back to the inventory through the hamburger menu link', async ({
+  test('[CART_06] @regression Verify if user can navigate back to the inventory through the hamburger menu link', async ({
     pom,
     page,
   }) => {
@@ -55,7 +59,7 @@ test.describe('Cart Page - Verify cart flow', () => {
     await expect(page).toHaveURL(/inventory\.html/);
   });
 
-  test('Verify if user can logout by pressing Logout in the hamburger menu link', async ({
+  test('[CART_07] @regression Verify if user can logout by pressing Logout in the hamburger menu link', async ({
     pom,
     page,
   }) => {
@@ -64,7 +68,7 @@ test.describe('Cart Page - Verify cart flow', () => {
     await expect(page).toHaveURL('/');
   });
 
-  test('Verify if the cart badge updates when the user removes a product', async ({
+  test('[CART_08] @regression Verify if the cart badge updates when the user removes a product', async ({
     pom,
   }) => {
     const itemCount = itemsData.items.length - 1;
@@ -73,7 +77,7 @@ test.describe('Cart Page - Verify cart flow', () => {
     await expect(pom.cartPage.cartCount).toHaveText(`${itemCount}`);
   });
 
-  test('Verify if the cart page correctly displays cart items', async ({
+  test('[CART_09] @smoke @regression Verify if the cart page correctly displays cart items', async ({
     pom,
   }) => {
     const actualItems = await pom.cartPage.cartItems.allInnerTexts();

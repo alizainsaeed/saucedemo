@@ -1,13 +1,26 @@
-# Test Cases for Sauce Demo
+# Automated Test Cases
 
-- **Login Page**: https://docs.google.com/spreadsheets/d/1DX2x2gwdaCFflPbLz8OHMOTogpTMFxzzHBygFTTrsHQ/edit?usp=sharing
+This page is the index for the automated case matrices. Each page documents the
+case IDs, expected behavior, and Playwright tags for a part of the SauceDemo
+shopping flow.
 
-- **Inventory Page**: https://docs.google.com/spreadsheets/d/12zLmeFsptMof0UDNZAl0u_bWJLpKqj-zGT3WJuhAB64/edit?usp=sharing
+| Area                     | Coverage                                                                                                 | Test cases                                        |
+| ------------------------ | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------- |
+| Authentication and login | Shared authenticated setup, successful and unsuccessful login, input validation, and login-page elements | [Authentication and login](./test_cases/login.md) |
+| Inventory                | Cart actions, cart badge, navigation, logout, and product sorting                                        | [Inventory](./test_cases/inventory.md)            |
+| Cart                     | Cart contents, item removal, checkout navigation, and menu actions                                       | [Cart](./test_cases/cart.md)                      |
+| Checkout                 | Checkout form validation, order summary, completion, and PDF download                                    | [Checkout](./test_cases/checkout.md)              |
 
-- **Cart Page**: https://docs.google.com/spreadsheets/d/1zUga0D558-Frx4-68WYPwKo2BDJZKSrVfQl-CBeidB8/edit?usp=sharing
+## Tags and status
 
-- **Checkout Page (Step One)**: https://docs.google.com/spreadsheets/d/1SIvo8sK9ZgbgVyq-exP7eXT1bUEWxyqo1N-eHzsFzog/edit?usp=sharing
+- `@smoke` identifies the selected critical-path tests. These tests are also
+  tagged `@regression`.
+- `@regression` identifies tests included in the tagged regression run.
+- `test.fixme` cases document known application behavior that does not currently
+  meet the expected result. Playwright reports them as skipped until the issue
+  is resolved and the test is re-enabled.
 
-- **Checkout Page (Step Two)**: https://docs.google.com/spreadsheets/d/1YdY8p_JUJZ2UpoxrJZrAG5XCBy0lY54IJNzovCfPMfQ/edit?gid=0#gid=0
-
-- **Checkout Page (Completion)**: https://docs.google.com/spreadsheets/d/1hB_dxCNfbBrEjdzCeWZUYvRyBUHSFUxsKexWGWwF4rU/edit?usp=sharing
+Run the smoke subset with `npm run test:smoke`, the tagged regression suite with
+`npm run test:regression`, or the configured browser projects with `npm test`.
+See the [documentation index](./README.md) for additional commands and suite
+notes.

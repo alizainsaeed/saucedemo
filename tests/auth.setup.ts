@@ -4,13 +4,17 @@ import { LoginPage } from '../pages/LoginPage';
 
 const authSession = 'playwright/.auth/session.json';
 
-test('Authenticate user', async ({ page }) => {
-  const loginPage = new LoginPage(page);
-  await loginPage.goto();
+test(
+  '[SETUP_01] Authenticate user',
+  { tag: ['@smoke', '@regression'] },
+  async ({ page }) => {
+    const loginPage = new LoginPage(page);
+    await loginPage.goto();
 
-  const user = getUserByName(loginPage, 'valid login');
-  await loginPage.login(user.username, user.password);
-  await expect(page).toHaveURL('/inventory.html');
+    const user = getUserByName(loginPage, 'valid login');
+    await loginPage.login(user.username, user.password);
+    await expect(page).toHaveURL('/inventory.html');
 
-  await page.context().storageState({ path: authSession });
-});
+    await page.context().storageState({ path: authSession });
+  }
+);

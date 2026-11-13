@@ -4,7 +4,13 @@
   "description": "Sauce Demo automation project",
   "scripts": {
     "format": "npx prettier --write '**/*.{ts,spec.ts,setup.ts}'",
+    "format:check": "npx prettier --check '**/*.{ts,spec.ts,setup.ts}' eslint.config.js",
+    "lint": "npx eslint .",
+    "typecheck": "npx tsc --noEmit",
+    "quality": "npm run lint && npm run typecheck && npm run format:check",
     "test": "npx playwright test --project=setup --project=chromium --project=firefox --project=webkit",
+    "test:smoke": "npx playwright test --grep @smoke --fail-on-flaky-tests",
+    "test:regression": "npx playwright test --grep @regression --fail-on-flaky-tests",
     "test:chromium": "npx playwright test --project=setup --project=chromium",
     "test:firefox": "npx playwright test --project=setup --project=firefox",
     "test:webkit": "npx playwright test --project=setup --project=webkit",
@@ -20,10 +26,13 @@
   "author": "alizainsaeed",
   "license": "MIT",
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.64.1",
     "@types/node": "^26.6.5",
+    "eslint": "^10.14.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.7",
+    "pdf-parse": "^2.4.5",
     "prettier": "^3.9.10",
     "typescript": "^7.0.2"
   }

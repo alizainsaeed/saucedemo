@@ -15,12 +15,12 @@ This repository automates browser-based checks of the [SauceDemo](https://www.sa
 - **Architecture:** Page Object Model (POM), extended with a shared Playwright fixture.
 - **Browsers:** Chromium, Firefox, and WebKit.
 - **Reporter:** Playwright HTML reporter (served at https://alizainsaeed.github.io/saucedemo/).
-- **Formatting:** Prettier.
+- **Quality checks:** ESLint for JavaScript configuration, TypeScript type-checking, and Prettier formatting checks.
 - **CI:** GitHub Actions.
 
 ### Coverage and scope
 
-The automated checks cover login success and validation, inventory display and sorting, cart actions, checkout validation and totals, navigation, and order completion/download behavior. The implemented cases are listed in [`docs/test_cases.md`](./docs/test_cases.md).
+The automated checks cover login success and validation, inventory display and sorting, cart actions, checkout validation and totals, navigation, and order completion/download behavior. The [testing documentation](./docs/README.md) provides an overview, and the [automated test case index](./docs/test_cases.md) links to the page-by-page matrices.
 
 The suite currently does not cover APIs, accessibility audits, performance, security, or other applications/environments. Two checkout behaviors are marked as known application bugs with `test.fixme` in [`tests/checkout.spec.ts`](./tests/checkout.spec.ts): submitting checkout with Enter and validating that the postal code contains only numerals.
 
@@ -80,12 +80,17 @@ npm test                    # Setup and all browser projects
 npm run test:chromium       # Setup and Chromium
 npm run test:firefox        # Setup and Firefox
 npm run test:webkit         # Setup and WebKit
+npm run test:smoke
+npm run test:regression
+npm run quality             # Lint, type-check, and check formatting
+npm run format:check
 npx playwright test tests/cart.spec.ts --project=chromium
 npm run ui                  # Setup, then open Playwright UI mode
 npx playwright test --headed
 ```
 
 The browser projects run in headless mode by default. Use `--headed` for a visible browser or `npm run ui` to select and inspect tests interactively.
+Tests have stable case IDs in their titles and are tagged `@regression`; a critical-path subset is also tagged `@smoke`. The IDs and current coverage are documented in [`docs/test_cases.md`](./docs/test_cases.md).
 
 ## 3. Architecture and Directory Structure
 
@@ -93,7 +98,7 @@ The browser projects run in headless mode by default. Use `--headed` for a visib
 .
 ├── .github/workflows/  GitHub Actions workflow
 ├── .vscode/            Workspace editor settings
-├── docs/               Test-case reference
+├── docs/               Test documentation and page-level case matrices
 ├── fixtures/           Shared typed POM fixture
 ├── pages/              Page objects for login, inventory, cart, checkout
 ├── playwright/         Generated authentication state (ignored by Git)
@@ -194,8 +199,8 @@ The current public demo suite needs no private credentials or API tokens. The sa
   ```
 
 - Test output is written to `test-results/`.
-- Locally, tracing is configured to be retained on failure, with screenshots and snapshots included in the trace. Open a trace with `npx playwright show-trace <path-to-trace.zip>`.
-- CI disables trace capture. Standalone screenshots, video recording, and browser-console log collection are not configured.
+- Tracing is configured to be retained on failure, with screenshots and snapshots included in the trace. Open a trace with `npx playwright show-trace <path-to-trace.zip>`.
+- CI uploads the HTML report and test results, including failure traces, as a diagnostic artifact on every run; artifacts are retained for 14 days. Standalone screenshots, video recording, and browser-console log collection are not configured.
 - The setup project's storage state is written under `playwright/.auth/` and is ignored by Git.
 
 ### Troubleshooting
@@ -210,11 +215,12 @@ The current public demo suite needs no private credentials or API tokens. The sa
 
 ### GitHub Actions workflow
 
-[`.github/workflows/playwright.yml`](./.github/workflows/playwright.yml) runs on pushes and pull requests targeting `main` or `master` when one of the workflow's configured project paths changes. It checks out the repository, sets up the current Node.js LTS, runs `npm ci`, installs Playwright browsers and Linux dependencies, and executes `npx playwright test --fail-on-flaky-tests`.
+[`.github/workflows/playwright.yml`](./.github/workflows/playwright.yml) runs on pushes and pull requests targeting `main` or `master` when one of the workflow's configured project paths changes. It checks out the repository, sets up the current Node.js LTS, runs `npm ci`, runs lint, type-check, and formatting checks, installs Playwright browsers and Linux dependencies, and executes `npx playwright test --fail-on-flaky-tests`.
 
-After a successful push run, the workflow uploads `playwright-report/` as a GitHub Pages artifact and deploys it. Pull requests do not deploy the report; failed runs do not upload the Pages artifact. To publish reports, enable GitHub Pages with GitHub Actions as the repository's deployment source.
+After a successful push run, the workflow uploads `playwright-report/` as a GitHub Pages artifact and deploys it. Pull requests do not deploy the report. The HTML report and test-results folder are separately uploaded as diagnostic artifacts on both successful and failed runs. To publish reports, enable GitHub Pages with GitHub Actions as the repository's deployment source.
 
-The workflow has no scheduled trigger. Documentation-only changes do not currently match its path filters.
+The workflow has no scheduled trigger. Changes limited to `README.md` or
+`LICENSE.md` do not match its path filters.
 
 ### Dependency updates and maintenance
 
