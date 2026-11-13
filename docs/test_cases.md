@@ -9,3 +9,5 @@
 - **Checkout Page (Step One)**: https://docs.google.com/spreadsheets/d/1SIvo8sK9ZgbgVyq-exP7eXT1bUEWxyqo1N-eHzsFzog/edit?usp=sharing
 
 - **Checkout Page (Step Two)**: https://docs.google.com/spreadsheets/d/1YdY8p_JUJZ2UpoxrJZrAG5XCBy0lY54IJNzovCfPMfQ/edit?gid=0#gid=0
+
+- **Checkout Page (Completion)**: https://docs.google.com/spreadsheets/d/1hB_dxCNfbBrEjdzCeWZUYvRyBUHSFUxsKexWGWwF4rU/edit?usp=sharing
