@@ -26,10 +26,16 @@ on:
       - 'test-data/**'
       - 'tests/**'
       - 'utils/**'
+
+permissions:
+  contents: read
+
 jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -40,10 +46,23 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
       - name: Run Playwright tests
-        run: npx playwright test
-      - uses: actions/upload-artifact@v4
-        if: ${{ !cancelled() }}
+        run: npx playwright test --fail-on-flaky-tests
+      - name: Upload Pages artifact
+        if: success() && github.event_name == 'push'
+        uses: actions/upload-pages-artifact@v3
         with:
-          name: playwright-report
           path: playwright-report/
-          retention-days: 30
+  deploy:
+    if: github.event_name == 'push'
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,5 +1,6 @@
 import { Page, Locator } from '@playwright/test';
 import users from '../test-data/users.json';
+import { BasePage } from './BasePage';
 
 interface User {
   name: string;
@@ -10,8 +11,7 @@ interface User {
   closeAlert?: boolean;
 }
 
-export class LoginPage {
-  readonly page: Page;
+export class LoginPage extends BasePage {
   readonly usernameInput: Locator;
   readonly passwordInput: Locator;
   readonly loginButton: Locator;
@@ -19,7 +19,7 @@ export class LoginPage {
   readonly users: User[];
 
   constructor(page: Page) {
-    this.page = page;
+    super(page);
     this.usernameInput = page.getByPlaceholder('Username');
     this.passwordInput = page.getByPlaceholder('Password');
     this.loginButton = page.getByRole('button', { name: 'Login' });
@@ -28,7 +28,7 @@ export class LoginPage {
   }
 
   async goto(): Promise<void> {
-    await this.page.goto('/');
+    await this.navigateTo('/');
   }
 
   async login(username: string, password: string): Promise<void> {

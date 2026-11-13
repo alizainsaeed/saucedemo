@@ -1,32 +1,22 @@
-import { Page, expect, Locator } from '@playwright/test';
+import { Locator, Page } from '@playwright/test';
+import { BasePage } from './BasePage';
 
-export class CartPage {
-  readonly page: Page;
+export class CartPage extends BasePage {
   readonly checkoutButton: Locator;
   readonly shoppingButton: Locator;
   readonly cartList: Locator;
-  readonly hamburgerIcon: Locator;
-  readonly hamburgerMenu: Locator;
-  readonly inventoryLink: Locator;
-  readonly logoutLink: Locator;
-  readonly cartCount: Locator;
   readonly cartItems: Locator;
 
   constructor(page: Page) {
-    this.page = page;
-    this.hamburgerIcon = page.getByRole('button', { name: 'Open Menu' });
-    this.hamburgerMenu = page.getByRole('navigation');
+    super(page);
     this.checkoutButton = page.getByTestId('checkout');
     this.shoppingButton = page.getByTestId('continue-shopping');
     this.cartList = page.getByTestId('cart-list');
-    this.cartCount = page.getByTestId('shopping-cart-badge');
-    this.inventoryLink = page.getByTestId('inventory-sidebar-link');
-    this.logoutLink = page.getByTestId('logout-sidebar-link');
     this.cartItems = page.getByTestId('inventory-item-name');
   }
 
   async goto(): Promise<void> {
-    await this.page.goto('/cart.html');
+    await this.navigateTo('/cart.html');
   }
 
   async removeCartItem(itemName: string): Promise<Locator> {

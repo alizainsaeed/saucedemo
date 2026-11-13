@@ -102,12 +102,12 @@ npx playwright test --headed
 
 - **HTML report:** generated in `playwright-report/`; open it with `npx playwright show-report`.
 - **Test output and failure artifacts:** stored in `test-results/`.
-- **Trace, screenshots, and snapshots:** tracing is enabled and retained on failure. Open a generated trace with `npx playwright show-trace <path-to-trace.zip>`.
+- **Trace, screenshots, and snapshots:** tracing is enabled locally and retained on failure. CI disables trace capture so failure data is not published.
 - **Authentication state:** generated in `playwright/.auth/` by the setup project and excluded from version control.
 
 ## CI/CD Integration
 
-The GitHub Actions workflow in `.github/workflows/playwright.yml` runs on pushes and pull requests targeting `main` or `master` when relevant project files change. It checks out the repository, sets up Node.js LTS, installs npm dependencies and Playwright browsers, then runs the full test suite. The `playwright-report/` directory is uploaded as a workflow artifact with a 30-day retention period, including when a run is cancelled.
+The GitHub Actions workflow in `.github/workflows/playwright.yml` runs on pushes and pull requests targeting `main` or `master` when relevant project files change. It publishes the Playwright HTML report to GitHub Pages only after a successful, non-flaky push; pull requests and failed runs do not publish reports. The Pages artifact contains only `playwright-report/`, and CI tracing is disabled to keep traces, screenshots, and snapshots out of the public site. Enable GitHub Pages with **GitHub Actions** as the build and deployment source in the repository settings.
 
 ## License
 

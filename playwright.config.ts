@@ -10,7 +10,9 @@ export default defineConfig({
   use: {
     testIdAttribute: 'data-test',
     baseURL: 'https://www.saucedemo.com',
-    trace: { mode: 'retain-on-failure', screenshots: true, snapshots: true },
+    trace: process.env.CI
+      ? 'off'
+      : { mode: 'retain-on-failure', screenshots: true, snapshots: true },
   },
 
   projects: [
