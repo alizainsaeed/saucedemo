@@ -42,6 +42,13 @@ export class CartPage extends BasePage {
     await titleButton.click();
   }
 
+  async checkout(): Promise<void> {
+    await Promise.all([
+      this.page.waitForURL(/\/checkout-step-one\.html$/),
+      this.checkoutButton.click(),
+    ]);
+  }
+
   cartItemName(itemName: string): Locator {
     return this.cartItem(itemName).getByRole('button', {
       name: `View details for ${itemName}`,
@@ -49,7 +56,7 @@ export class CartPage extends BasePage {
     });
   }
 
-  private cartItem(itemName: string): Locator {
+  cartItem(itemName: string): Locator {
     const titleButton = this.page.getByRole('button', {
       name: `View details for ${itemName}`,
       exact: true,

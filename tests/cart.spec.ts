@@ -14,7 +14,7 @@ test.describe('Cart Page - Verify cart flow', () => {
     pom,
     page,
   }) => {
-    await pom.cartPage.checkoutButton.click();
+    await pom.cartPage.checkout();
     await expect(page).toHaveURL('/checkout-step-one.html');
   });
 
